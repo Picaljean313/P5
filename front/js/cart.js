@@ -39,3 +39,73 @@ for(let cartOrder of cart){
       </div>`;
     })
 }
+
+let cartItemQuantitiesHtmlCollection = document.getElementsByClassName("itemQuantity");
+let cartItemDelationHtmlCollection = document.getElementsByClassName("deleteItem");
+
+window.addEventListener("load", function() {
+  console.log(cartItemQuantitiesHtmlCollection.length);
+  for(let i = 0; i<cartItemQuantitiesHtmlCollection.length; i++){
+    console.log(cartItemQuantitiesHtmlCollection[i]);
+  }
+  let cartItemQuantitiesArray = Array.from(cartItemQuantitiesHtmlCollection);
+  console.log(cartItemQuantitiesArray);
+
+
+  for(let i in cartItemQuantitiesArray){
+    console.log(cartItemQuantitiesArray[i]);
+    cartItemQuantitiesArray[i].addEventListener("change", function () {
+      let itemId = cartItemQuantitiesArray[i].closest("article").dataset.id;
+  
+      console.log(itemId);
+  
+      let itemColor = cartItemQuantitiesArray[i].closest("article").dataset.color;
+  
+      console.log(itemColor);
+  
+      let itemQuantity = cartItemQuantitiesArray[i].value;
+      let item = {
+        id : itemId,
+        color : itemColor,
+        quantity : itemQuantity
+      };
+      for (let j in cart) {
+        if (cart[j].id === itemId && cart[j].color === itemColor){
+          cart.splice(j,1,item);
+        }
+      }
+      localStorage.clear();
+      localStorage.setItem("cartItem", JSON.stringify(cart));
+  
+      console.log(localStorage);
+    });
+  }
+
+
+  let cartItemDelationArray = Array.from(cartItemDelationHtmlCollection);
+  console.log(cartItemDelationArray);
+
+  for (let k in cartItemDelationArray){
+    cartItemDelationArray[k].addEventListener("click", function(){
+      let itemId = cartItemDelationArray[k].closest("article").dataset.id;
+  
+      console.log(itemId);
+  
+      let itemColor = cartItemDelationArray[k].closest("article").dataset.color;
+  
+      console.log(itemColor);
+      for (let l in cart){
+        if (cart[l].id === itemId && cart[l].color === itemColor){
+          cart.splice(l,1);
+        }
+      }
+      document.getElementById("cart__items").removeChild(cartItemDelationArray[k].closest("article"));
+      localStorage.clear();
+      localStorage.setItem("cartItem", JSON.stringify(cart));
+    })
+  }
+
+});
+
+
+
